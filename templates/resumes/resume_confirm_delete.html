@@ -1,0 +1,13 @@
+<h1>Видалити резюме?</h1>
+
+<p>Ви впевнені, що хочете видалити "{{ object.title }}"?</p>
+
+<form method="post">
+    {% csrf_token %}
+
+    <button type="submit">Так, видалити</button>
+</form>
+
+<a href="{% url 'resume_detail' object.pk %}">
+    Скасувати
+</a>

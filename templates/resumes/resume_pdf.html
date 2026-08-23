@@ -1,0 +1,87 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ resume.title }}</title>
+
+    <link rel="stylesheet" href="{% static 'css/resume_pdf.css' %}">
+</head>
+
+<body>
+
+<div class="resume">
+
+    <header class="header">
+
+        {% if resume.personal_info.photo %}
+            <img
+                class="photo"
+                src="{{ resume.personal_info.photo.url }}"
+                alt="Фото"
+            >
+        {% endif %}
+
+        <div class="header-info">
+            <h1>
+                {{ resume.personal_info.first_name }}
+                {{ resume.personal_info.last_name }}
+            </h1>
+
+            <div class="contacts">
+                {% if resume.personal_info.email %}
+                    <span>{{ resume.personal_info.email }}</span>
+                {% endif %}
+
+                {% if resume.personal_info.phone %}
+                    <span>{{ resume.personal_info.phone }}</span>
+                {% endif %}
+
+                {% if resume.personal_info.city %}
+                    <span>{{ resume.personal_info.city }}</span>
+                {% endif %}
+            </div>
+        </div>
+
+    </header>
+
+
+    {% if resume.personal_info.about %}
+        <section>
+            <h2>Про себе</h2>
+            <p>{{ resume.personal_info.about }}</p>
+        </section>
+    {% endif %}
+
+
+    <section>
+        <h2>Навички</h2>
+
+        <p>
+            Тут поки будуть навички.
+        </p>
+    </section>
+
+
+    <section>
+        <h2>Досвід роботи</h2>
+
+        <p>
+            Тут поки буде досвід роботи.
+        </p>
+    </section>
+
+
+    <section>
+        <h2>Освіта</h2>
+
+        <p>
+            Тут поки буде освіта.
+        </p>
+    </section>
+
+</div>
+
+</body>
+</html>

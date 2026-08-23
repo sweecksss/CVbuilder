@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Мої резюме</title>
+</head>
+<body>
+
+<a href="{% url 'resume_create' %}">Створити</a>
+<h1>Мої резюме</h1>
+
+{% for resume in resumes %}
+    <div>
+        <a href="{% url 'resume_detail' resume.pk %}">{{ resume.title }}</a>
+        <p>Створено: {{ resume.created_at }}</p>
+    </div>
+{% empty %}
+    <p>У вас ще немає резюме.</p>
+{% endfor %}
+
+</body>
+</html>
