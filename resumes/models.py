@@ -39,3 +39,16 @@ class PersonalInfo(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+class Education(models.Model):
+    resume = models.ForeignKey(
+        Resume,
+        on_delete=models.CASCADE,
+        related_name='education'
+    )
+
+    institution = models.CharField(max_length=64, blank=True)
+    specialty = models.CharField(max_length=64, blank=True)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    description = models.TextField(blank=True)

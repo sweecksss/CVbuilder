@@ -1,5 +1,5 @@
 from django import forms
-from .models import Resume, PersonalInfo
+from .models import Resume, PersonalInfo, Education
 
 
 class ResumeForm(forms.ModelForm):
@@ -19,3 +19,23 @@ class PersonalInfoForm(forms.ModelForm):
             "about",
             "photo",
         ]
+
+class EducationForm(forms.ModelForm):
+    class Meta:
+        model = Education
+        fields = [
+            "institution",
+            "specialty",
+            "start_date",
+            "end_date",
+            "description",
+        ]
+
+        widgets = {
+            "start_date": forms.DateInput(
+                attrs={"type": "date"}
+            ),
+            "end_date": forms.DateInput(
+                attrs={"type": "date"}
+            ),
+        }

@@ -59,7 +59,7 @@
         <h2>Навички</h2>
 
         <p>
-            Тут поки будуть навички.
+            Тут будуть навички.
         </p>
     </section>
 
@@ -68,18 +68,38 @@
         <h2>Досвід роботи</h2>
 
         <p>
-            Тут поки буде досвід роботи.
+            Тут буде досвід роботи.
         </p>
     </section>
 
 
-    <section>
-        <h2>Освіта</h2>
+    {% if resume.education.all %}
+        <section>
+            <h2>Освіта</h2>
 
-        <p>
-            Тут поки буде освіта.
-        </p>
-    </section>
+            {% for education in resume.education.all %}
+                <div class="education">
+                    <h3>{{ education.institution }}</h3>
+
+                    {% if education.specialty %}
+                        <p>{{ education.specialty }}</p>
+                    {% endif %}
+
+                    {% if education.start_date %}
+                        <p>Початок: {{ education.start_date }}</p>
+                    {% endif %}
+
+                    {% if education.end_date %}
+                        <p>Кінець: {{ education.end_date }}</p>
+                    {% endif %}
+
+                    {% if education.description %}
+                        <p>{{ education.description }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </section>
+    {% endif %}
 
 </div>
 

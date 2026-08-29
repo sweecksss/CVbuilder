@@ -8,8 +8,8 @@ from django.template.loader import render_to_string
 from weasyprint import HTML
 from django.urls import reverse
 
-from .models import Resume, PersonalInfo
-from .forms import ResumeForm, PersonalInfoForm
+from .models import Resume, PersonalInfo, Education
+from .forms import ResumeForm, PersonalInfoForm, EducationForm
 
 # Create your views here.
 
@@ -33,7 +33,6 @@ class ResumeCreateView(LoginRequiredMixin, CreateView):
 
 
 class ResumePDFView(LoginRequiredMixin, DetailView):
-    # Це страшно, але було легко
     model = Resume
 
     def get_queryset(self):
@@ -93,6 +92,24 @@ class PersonalInfoCreateView(LoginRequiredMixin, CreateView):
     model = PersonalInfo
     form_class = PersonalInfoForm
     template_name = "resumes/personal_info_form.html"
+
+    def form_valid(self, form):
+        resume = Resume.objects.get(
+            pk=self.kwargs["pk"],
+            owner=self.request.user
+        )
+
+        form.instance.resume = resume
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("resume_detail", kwargs={"pk": self.object.resume.pk})
+
+class EducationCreateView(LoginRequiredMixin, CreateView):
+    model = Education
+    form_class = EducationForm
+    template_name = "resumes/education_form.html"
 
     def form_valid(self, form):
         resume = Resume.objects.get(

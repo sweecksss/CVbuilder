@@ -24,12 +24,46 @@
     <p>Особисті дані ще не додані.</p>
 {% endif %}
 
+
+<h2>Освіта</h2>
+
+{% for education in resume.education.all %}
+    <div>
+        <h3>{{ education.institution }}</h3>
+
+        <p>Спеціальність: {{ education.specialty }}</p>
+
+        {% if education.start_date %}
+            <p>Початок: {{ education.start_date }}</p>
+        {% endif %}
+
+        {% if education.end_date %}
+            <p>Кінець: {{ education.end_date }}</p>
+        {% endif %}
+
+        {% if education.description %}
+            <p>{{ education.description }}</p>
+        {% endif %}
+    </div>
+{% empty %}
+    <p>Освіта ще не додана.</p>
+{% endfor %}
+
+
 <p>Створено: {{ resume.created_at }}</p>
 <p>Оновлено: {{ resume.updated_at }}</p>
 
 <a href="{% url 'personal_info_create' resume.pk %}">
     Додати особисті дані
 </a>
+
+<br>
+
+<a href="{% url 'education_create' resume.pk %}">
+    Додати освіту
+</a>
+
+<br>
 
 <a href="{% url 'resume_pdf' resume.pk %}" download>
     Скачать PDF
