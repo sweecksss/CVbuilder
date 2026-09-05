@@ -67,9 +67,31 @@
     <section>
         <h2>Досвід роботи</h2>
 
-        <p>
-            Тут буде досвід роботи.
-        </p>
+        {% for experience in resume.work_experiences.all %}
+            <div class="experience">
+
+                <h3>{{ experience.company }}</h3>
+
+                {% if experience.position %}
+                    <p>{{ experience.position }}</p>
+                {% endif %}
+
+                {% if experience.start_date %}
+                    <p>Початок: {{ experience.start_date }}</p>
+                {% endif %}
+
+                {% if experience.end_date %}
+                    <p>Кінець: {{ experience.end_date }}</p>
+                {% endif %}
+
+                {% if experience.description %}
+                    <p>{{ experience.description }}</p>
+                {% endif %}
+
+            </div>
+        {% empty %}
+            <p>Досвід роботи ще не доданий.</p>
+        {% endfor %}
     </section>
 
 

@@ -49,6 +49,31 @@
     <p>Освіта ще не додана.</p>
 {% endfor %}
 
+<h2>Досвід роботи</h2>
+
+{% for experience in resume.work_experiences.all %}
+    <div>
+        <h3>{{ experience.company }}</h3>
+
+        {% if experience.position %}
+            <p>Посада: {{ experience.position }}</p>
+        {% endif %}
+
+        {% if experience.start_date %}
+            <p>Початок: {{ experience.start_date }}</p>
+        {% endif %}
+
+        {% if experience.end_date %}
+            <p>Кінець: {{ experience.end_date }}</p>
+        {% endif %}
+
+        {% if experience.description %}
+            <p>{{ experience.description }}</p>
+        {% endif %}
+    </div>
+{% empty %}
+    <p>Досвід роботи ще не доданий.</p>
+{% endfor %}
 
 <p>Створено: {{ resume.created_at }}</p>
 <p>Оновлено: {{ resume.updated_at }}</p>
@@ -64,6 +89,10 @@
 </a>
 
 <br>
+
+<a href="{% url 'work_experience_create' resume.pk %}">
+    Додати досвід
+</a>
 
 <a href="{% url 'resume_pdf' resume.pk %}" download>
     Скачать PDF
