@@ -65,3 +65,14 @@ class WorkExperience(models.Model):
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     description = models.TextField()
+
+
+class Skill(models.Model):
+    resume = models.ForeignKey(
+        Resume,
+        on_delete=models.CASCADE,
+        related_name='skills'
+    )
+
+    name = models.CharField(max_length=64, blank=True)
+    level = models.CharField(max_length=64, blank=True)

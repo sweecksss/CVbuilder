@@ -1,5 +1,5 @@
 from django import forms
-from .models import Resume, PersonalInfo, Education, WorkExperience
+from .models import Resume, PersonalInfo, Education, WorkExperience, Skill
 
 
 class ResumeForm(forms.ModelForm):
@@ -59,3 +59,11 @@ class WorkExperienceForm(forms.ModelForm):
                 attrs={"type": "date"}
             ),
         }
+
+class SkillForm(forms.ModelForm):
+    class Meta:
+        model = Skill
+        fields = [
+            "name",
+            "level",
+        ]

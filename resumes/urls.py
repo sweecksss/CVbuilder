@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import ResumeCreateView, ResumePDFView, ResumeDetailView, ResumeUpdateView, ResumeDeleteView, PersonalInfoCreateView, EducationCreateView, WorkExperienceCreateView
+from .views import ResumeCreateView, ResumePDFView, ResumeDetailView, ResumeUpdateView, ResumeDeleteView, PersonalInfoCreateView, EducationCreateView, WorkExperienceCreateView, SkillCreateView, SkillUpdateView, SkillDeleteView
 
 urlpatterns = [
     path("", views.resume_list, name="resume_list"),
@@ -12,4 +12,7 @@ urlpatterns = [
     path("resume/<int:pk>/personal-info/", PersonalInfoCreateView.as_view(), name="personal_info_create"),
     path("resume/<int:pk>/education/", EducationCreateView.as_view(), name="education_create"),
     path("resume/<int:pk>/work-experience/", WorkExperienceCreateView.as_view(), name="work_experience_create"),
+    path("resume/<int:pk>/skills/",SkillCreateView.as_view(),name="skill_create"),
+    path("skill/edit/<int:pk>/",SkillUpdateView.as_view(),name="skill_update"),
+    path("skill/delete/<int:pk>/",SkillDeleteView.as_view(),name="skill_delete"),
 ]

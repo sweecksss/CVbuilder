@@ -75,6 +75,28 @@
     <p>Досвід роботи ще не доданий.</p>
 {% endfor %}
 
+<h2>Навички</h2>
+
+{% for skill in resume.skills.all %}
+    <div>
+        <h3>{{ skill.name }}</h3>
+
+        {% if skill.level %}
+            <p>Рівень: {{ skill.level }}</p>
+        {% endif %}
+
+        <a href="{% url 'skill_update' skill.pk %}">
+            Редагувати
+        </a>
+
+        <a href="{% url 'skill_delete' skill.pk %}">
+            Видалити
+        </a>
+    </div>
+{% empty %}
+    <p>Навички ще не додані.</p>
+{% endfor %}
+
 <p>Створено: {{ resume.created_at }}</p>
 <p>Оновлено: {{ resume.updated_at }}</p>
 
@@ -93,6 +115,14 @@
 <a href="{% url 'work_experience_create' resume.pk %}">
     Додати досвід
 </a>
+
+<br>
+
+<a href="{% url 'skill_create' resume.pk %}">
+    Додати навичку
+</a>
+
+<br>
 
 <a href="{% url 'resume_pdf' resume.pk %}" download>
     Скачать PDF

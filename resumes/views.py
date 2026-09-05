@@ -8,8 +8,8 @@ from django.template.loader import render_to_string
 from weasyprint import HTML
 from django.urls import reverse
 
-from .models import Resume, PersonalInfo, Education, WorkExperience
-from .forms import ResumeForm, PersonalInfoForm, EducationForm, WorkExperienceForm
+from .models import Resume, PersonalInfo, Education, WorkExperience, Skill
+from .forms import ResumeForm, PersonalInfoForm, EducationForm, WorkExperienceForm, SkillForm
 
 # Create your views here.
 
@@ -141,3 +141,50 @@ class WorkExperienceCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse("resume_detail", kwargs={"pk": self.object.resume.pk})
+
+class SkillCreateView(LoginRequiredMixin, CreateView):
+    model = Skill
+    form_class = SkillForm
+    template_name = "resumes/skill_form.html"
+
+    def form_valid(self, form):
+        resume = Resume.objects.get(
+            pk=self.kwargs["pk"],
+            owner=self.request.user
+        )
+
+        form.instance.resume = resume
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("resume_detail", kwargs={"pk": self.object.resume.pk})
+
+class SkillUpdateView(LoginRequiredMixin, UpdateView):
+    model = Skill
+    form_class = SkillForm
+    template_name = "resumes/skill_form.html"
+
+    def get_queryset(self):
+        return Skill.objects.filter(
+            resume__owner = self.request.user
+        )
+
+    def get_success_url(self):
+        return reverse(
+            "resume_detail",
+            kwargs={"pk": self.object.resume.pk}
+        )
+
+class SkillDeleteView(LoginRequiredMixin, DeleteView):
+    model = Skill
+    template_name = "resumes/skill_confirm_delete.html"
+
+    def get_success_url(self):
+        return reverse(
+            "resume_detail",
+            kwargs={"pk": self.object.resume.pk}
+        )
+
+    def get_queryset(self):
+        return Skill.objects.filter(resume__owner=self.request.user)

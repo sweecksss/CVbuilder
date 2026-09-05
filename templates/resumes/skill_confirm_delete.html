@@ -1,0 +1,14 @@
+<h1>Видалити навичку?</h1>
+
+<p>
+    Ви впевнені, що хочете видалити "{{ object.name }}"?
+</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Так, видалити</button>
+</form>
+
+<a href="{% url 'resume_detail' object.resume.pk %}">
+    Скасувати
+</a>

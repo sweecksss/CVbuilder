@@ -55,13 +55,21 @@
     {% endif %}
 
 
-    <section>
-        <h2>Навички</h2>
+    {% if resume.skills.all %}
+        <section>
+            <h2>Навички</h2>
 
-        <p>
-            Тут будуть навички.
-        </p>
-    </section>
+            {% for skill in resume.skills.all %}
+                <div class="skill">
+                    <h3>{{ skill.name }}</h3>
+
+                    {% if skill.level %}
+                        <p>Рівень: {{ skill.level }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </section>
+    {% endif %}
 
 
     <section>
@@ -101,6 +109,7 @@
 
             {% for education in resume.education.all %}
                 <div class="education">
+
                     <h3>{{ education.institution }}</h3>
 
                     {% if education.specialty %}
@@ -118,6 +127,7 @@
                     {% if education.description %}
                         <p>{{ education.description }}</p>
                     {% endif %}
+
                 </div>
             {% endfor %}
         </section>
