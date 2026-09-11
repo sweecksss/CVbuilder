@@ -188,3 +188,72 @@ class SkillDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_queryset(self):
         return Skill.objects.filter(resume__owner=self.request.user)
+
+
+class PersonalInfoUpdateView(LoginRequiredMixin, UpdateView):
+    model = PersonalInfo
+    form_class = PersonalInfoForm
+    template_name = "resumes/personal_info_form.html"
+
+    def get_queryset(self):
+        return PersonalInfo.objects.filter(resume__owner=self.request.user)
+
+    def get_success_url(self):
+        return reverse("resume_detail", kwargs={"pk": self.object.resume.pk})
+
+
+class PersonalInfoDeleteView(LoginRequiredMixin, DeleteView):
+    model = PersonalInfo
+    template_name = "resumes/personal_info_confirm_delete.html"
+
+    def get_queryset(self):
+        return PersonalInfo.objects.filter(resume__owner=self.request.user)
+
+    def get_success_url(self):
+        return reverse("resume_detail", kwargs={"pk": self.object.resume.pk})
+
+
+class EducationUpdateView(LoginRequiredMixin, UpdateView):
+    model = Education
+    form_class = EducationForm
+    template_name = "resumes/education_form.html"
+
+    def get_queryset(self):
+        return Education.objects.filter(resume__owner=self.request.user)
+
+    def get_success_url(self):
+        return reverse("resume_detail", kwargs={"pk": self.object.resume.pk})
+
+
+class EducationDeleteView(LoginRequiredMixin, DeleteView):
+    model = Education
+    template_name = "resumes/education_confirm_delete.html"
+
+    def get_queryset(self):
+        return Education.objects.filter(resume__owner=self.request.user)
+
+    def get_success_url(self):
+        return reverse("resume_detail", kwargs={"pk": self.object.resume.pk})
+
+
+class WorkExperienceUpdateView(LoginRequiredMixin, UpdateView):
+    model = WorkExperience
+    form_class = WorkExperienceForm
+    template_name = "resumes/workexperience_form.html"
+
+    def get_queryset(self):
+        return WorkExperience.objects.filter(resume__owner=self.request.user)
+
+    def get_success_url(self):
+        return reverse("resume_detail", kwargs={"pk": self.object.resume.pk})
+
+
+class WorkExperienceDeleteView(LoginRequiredMixin, DeleteView):
+    model = WorkExperience
+    template_name = "resumes/work_experience_confirm_delete.html"
+
+    def get_queryset(self):
+        return WorkExperience.objects.filter(resume__owner=self.request.user)
+
+    def get_success_url(self):
+        return reverse("resume_detail", kwargs={"pk": self.object.resume.pk})

@@ -1,7 +1,4 @@
-<h1>Редагування резюме</h1>
-
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save Changes</button>
-</form>
+{% extends "resumes/form_base.html" %}
+{% block form_title %}Назва резюме{% endblock %}
+{% block heading %}Назва резюме{% endblock %}
+{% block description %}Назва допоможе знайти потрібну версію серед ваших резюме.{% endblock %}

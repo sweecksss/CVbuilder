@@ -33,10 +33,10 @@ class EducationForm(forms.ModelForm):
 
         widgets = {
             "start_date": forms.DateInput(
-                attrs={"type": "date"}
+                attrs={"type": "date"}, format="%Y-%m-%d"
             ),
             "end_date": forms.DateInput(
-                attrs={"type": "date"}
+                attrs={"type": "date"}, format="%Y-%m-%d"
             ),
         }
 
@@ -53,10 +53,10 @@ class WorkExperienceForm(forms.ModelForm):
 
         widgets = {
             "start_date": forms.DateInput(
-                attrs={"type": "date"}
+                attrs={"type": "date"}, format="%Y-%m-%d"
             ),
             "end_date": forms.DateInput(
-                attrs={"type": "date"}
+                attrs={"type": "date"}, format="%Y-%m-%d"
             ),
         }
 

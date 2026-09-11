@@ -1,7 +1,4 @@
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-
-    {{ form.as_p }}
-
-    <button type="submit">Зберегти</button>
-</form>
+{% extends "resumes/form_base.html" %}
+{% block form_title %}Навичка{% endblock %}
+{% block heading %}Навичка{% endblock %}
+{% block description %}Вкажіть навичку та рівень володіння нею.{% endblock %}

@@ -1,129 +1,44 @@
-<h1>{{ resume.title }}</h1>
-
-<a href="{% url 'resume_update' resume.pk %}">Редагувати</a>
-<a href="{% url 'resume_delete' resume.pk %}">Видалити</a>
-
-{% if resume.personal_info %}
-    <h2>Особисті дані</h2>
-
-    <p>Ім'я: {{ resume.personal_info.first_name }}</p>
-    <p>Прізвище: {{ resume.personal_info.last_name }}</p>
-    <p>Email: {{ resume.personal_info.email }}</p>
-    <p>Телефон: {{ resume.personal_info.phone }}</p>
-    <p>Місто: {{ resume.personal_info.city }}</p>
-    <p>Про себе: {{ resume.personal_info.about }}</p>
-
-    {% if resume.personal_info.photo %}
-        <img
-            src="{{ resume.personal_info.photo.url }}"
-            alt="Фото"
-            width="150"
-        >
-    {% endif %}
-{% else %}
-    <p>Особисті дані ще не додані.</p>
-{% endif %}
-
-
-<h2>Освіта</h2>
-
-{% for education in resume.education.all %}
-    <div>
-        <h3>{{ education.institution }}</h3>
-
-        <p>Спеціальність: {{ education.specialty }}</p>
-
-        {% if education.start_date %}
-            <p>Початок: {{ education.start_date }}</p>
-        {% endif %}
-
-        {% if education.end_date %}
-            <p>Кінець: {{ education.end_date }}</p>
-        {% endif %}
-
-        {% if education.description %}
-            <p>{{ education.description }}</p>
-        {% endif %}
+{% extends "base.html" %}
+{% block title %}{{ resume.title }}{% endblock %}
+{% block content %}
+<a href="{% url 'resume_list' %}" class="text-link mb-5">← Мої резюме</a>
+<div class="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-center">
+    <div class="min-w-0"><h1 class="break-words text-3xl font-bold tracking-tight">{{ resume.title }}</h1><p class="muted mt-2">Оновлено {{ resume.updated_at|date:"d.m.Y" }} · Створено {{ resume.created_at|date:"d.m.Y" }}</p></div>
+    <a href="{% url 'resume_pdf' resume.pk %}" download class="btn btn-primary shrink-0">Завантажити PDF ↓</a>
+</div>
+<div class="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_260px]">
+    <div class="min-w-0 space-y-5 break-words">
+        <section class="panel">
+            <h2 class="section-title mb-6">Особисті дані</h2>
+            {% if resume.personal_info %}
+            <div class="flex flex-col gap-5 sm:flex-row">
+                {% if resume.personal_info.photo %}<img src="{{ resume.personal_info.photo.url }}" alt="Фото {{ resume.personal_info.first_name }}" class="h-20 w-20 rounded-2xl object-cover">{% endif %}
+                <div class="min-w-0"><h3 class="text-2xl font-semibold">{{ resume.personal_info.first_name }} {{ resume.personal_info.last_name }}</h3><div class="mt-3 space-y-1 text-sm text-slate-500">{% if resume.personal_info.email %}<p>{{ resume.personal_info.email }}</p>{% endif %}{% if resume.personal_info.phone %}<p>{{ resume.personal_info.phone }}</p>{% endif %}{% if resume.personal_info.city %}<p>{{ resume.personal_info.city }}</p>{% endif %}</div></div>
+            </div>
+            <div class="mt-3 flex flex-wrap gap-4"><a href="{% url 'personal_info_update' resume.personal_info.pk %}" class="text-link">Редагувати</a><a href="{% url 'personal_info_delete' resume.personal_info.pk %}" class="inline-flex min-h-11 items-center text-sm text-red-600 hover:underline">Видалити</a></div>
+            {% if resume.personal_info.about %}<div class="mt-6 whitespace-pre-line leading-7 text-slate-600">{{ resume.personal_info.about }}</div>{% endif %}
+            {% else %}<p class="muted">Додайте ім’я, контакти та кілька слів про себе.</p><a href="{% url 'personal_info_create' resume.pk %}" class="text-link mt-3">＋ Додати особисті дані</a>{% endif %}
+        </section>
+        <section class="panel">
+            <div class="mb-5 flex flex-wrap items-center justify-between gap-2"><h2 class="section-title">Досвід роботи</h2><a href="{% url 'work_experience_create' resume.pk %}" class="text-link">＋ Додати досвід</a></div>
+            {% for experience in resume.work_experiences.all %}
+            <article class="border-l-2 border-blue-100 pb-6 pl-5 last:pb-0"><h3 class="font-semibold">{{ experience.company }}</h3>{% if experience.position %}<p class="mt-1 text-sm text-blue-700">{{ experience.position }}</p>{% endif %}<p class="muted mt-2">{% if experience.start_date %}Початок: {{ experience.start_date|date:"m.Y" }}{% endif %}{% if experience.end_date %} · Кінець: {{ experience.end_date|date:"m.Y" }}{% endif %}</p>{% if experience.description %}<p class="mt-3 whitespace-pre-line text-sm leading-7 text-slate-600">{{ experience.description }}</p>{% endif %}<div class="mt-3 flex flex-wrap gap-4"><a href="{% url 'work_experience_update' experience.pk %}" class="text-link">Редагувати</a><a href="{% url 'work_experience_delete' experience.pk %}" class="inline-flex min-h-11 items-center text-sm text-red-600 hover:underline">Видалити</a></div></article>
+            {% empty %}<p class="muted">Тут буде ваш професійний досвід. Почніть з останнього місця роботи.</p>{% endfor %}
+        </section>
+        <section class="panel">
+            <div class="mb-5 flex flex-wrap items-center justify-between gap-2"><h2 class="section-title">Освіта</h2><a href="{% url 'education_create' resume.pk %}" class="text-link">＋ Додати освіту</a></div>
+            {% for education in resume.education.all %}
+            <article class="border-l-2 border-blue-100 pb-6 pl-5 last:pb-0"><h3 class="font-semibold">{{ education.institution }}</h3>{% if education.specialty %}<p class="mt-1 text-sm text-blue-700">{{ education.specialty }}</p>{% endif %}<p class="muted mt-2">{% if education.start_date %}Початок: {{ education.start_date|date:"m.Y" }}{% endif %}{% if education.end_date %} · Кінець: {{ education.end_date|date:"m.Y" }}{% endif %}</p>{% if education.description %}<p class="mt-3 whitespace-pre-line text-sm leading-7 text-slate-600">{{ education.description }}</p>{% endif %}<div class="mt-3 flex flex-wrap gap-4"><a href="{% url 'education_update' education.pk %}" class="text-link">Редагувати</a><a href="{% url 'education_delete' education.pk %}" class="inline-flex min-h-11 items-center text-sm text-red-600 hover:underline">Видалити</a></div></article>
+            {% empty %}<p class="muted">Додайте навчальний заклад і вашу спеціальність.</p>{% endfor %}
+        </section>
+        <section class="panel">
+            <div class="mb-5 flex flex-wrap items-center justify-between gap-2"><h2 class="section-title">Навички</h2><a href="{% url 'skill_create' resume.pk %}" class="text-link">＋ Додати навичку</a></div>
+            <div class="divide-y divide-slate-100">{% for skill in resume.skills.all %}<div class="flex flex-wrap items-center justify-between gap-3 py-3"><div class="min-w-0"><h3 class="font-medium">{{ skill.name }}</h3>{% if skill.level %}<p class="muted">{{ skill.level }}</p>{% endif %}</div><div class="flex flex-wrap gap-4"><a href="{% url 'skill_update' skill.pk %}" aria-label="Редагувати навичку {{ skill.name }}" class="text-link">Редагувати</a><a href="{% url 'skill_delete' skill.pk %}" aria-label="Видалити навичку {{ skill.name }}" class="inline-flex min-h-11 items-center text-sm text-red-600 hover:underline">Видалити</a></div></div>{% empty %}<p class="muted">Які інструменти та вміння вирізняють вас? Додайте їх сюди.</p>{% endfor %}</div>
+        </section>
     </div>
-{% empty %}
-    <p>Освіта ще не додана.</p>
-{% endfor %}
-
-<h2>Досвід роботи</h2>
-
-{% for experience in resume.work_experiences.all %}
-    <div>
-        <h3>{{ experience.company }}</h3>
-
-        {% if experience.position %}
-            <p>Посада: {{ experience.position }}</p>
-        {% endif %}
-
-        {% if experience.start_date %}
-            <p>Початок: {{ experience.start_date }}</p>
-        {% endif %}
-
-        {% if experience.end_date %}
-            <p>Кінець: {{ experience.end_date }}</p>
-        {% endif %}
-
-        {% if experience.description %}
-            <p>{{ experience.description }}</p>
-        {% endif %}
-    </div>
-{% empty %}
-    <p>Досвід роботи ще не доданий.</p>
-{% endfor %}
-
-<h2>Навички</h2>
-
-{% for skill in resume.skills.all %}
-    <div>
-        <h3>{{ skill.name }}</h3>
-
-        {% if skill.level %}
-            <p>Рівень: {{ skill.level }}</p>
-        {% endif %}
-
-        <a href="{% url 'skill_update' skill.pk %}">
-            Редагувати
-        </a>
-
-        <a href="{% url 'skill_delete' skill.pk %}">
-            Видалити
-        </a>
-    </div>
-{% empty %}
-    <p>Навички ще не додані.</p>
-{% endfor %}
-
-<p>Створено: {{ resume.created_at }}</p>
-<p>Оновлено: {{ resume.updated_at }}</p>
-
-<a href="{% url 'personal_info_create' resume.pk %}">
-    Додати особисті дані
-</a>
-
-<br>
-
-<a href="{% url 'education_create' resume.pk %}">
-    Додати освіту
-</a>
-
-<br>
-
-<a href="{% url 'work_experience_create' resume.pk %}">
-    Додати досвід
-</a>
-
-<br>
-
-<a href="{% url 'skill_create' resume.pk %}">
-    Додати навичку
-</a>
-
-<br>
-
-<a href="{% url 'resume_pdf' resume.pk %}" download>
-    Скачать PDF
-</a>
+    <aside class="space-y-5 lg:sticky lg:top-6">
+        <section class="panel !p-5"><h2 class="section-title mb-4">Ваше резюме</h2><p class="muted mb-5">Заповніть розділи та завантажте документ, коли будете готові.</p><a href="{% url 'resume_update' resume.pk %}" class="btn btn-secondary w-full">Змінити назву</a><a href="{% url 'resume_delete' resume.pk %}" class="mt-3 inline-flex min-h-11 w-full items-center justify-center text-sm text-red-600 hover:underline">Видалити резюме</a></section>
+        <div class="rounded-2xl bg-blue-50 p-5"><h2 class="text-sm font-semibold text-blue-900">Пишіть про результат</h2><p class="mt-2 text-sm leading-6 text-blue-800">Конкретні приклади та досягнення допоможуть краще розповісти про ваш досвід.</p></div>
+    </aside>
+</div>
+{% endblock %}

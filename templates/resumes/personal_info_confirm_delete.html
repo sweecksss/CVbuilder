@@ -1,0 +1,3 @@
+{% extends "base.html" %}
+{% block title %}Підтвердження видалення{% endblock %}
+{% block content %}<section class="panel mx-auto max-w-lg"><span aria-hidden="true" class="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-red-50 text-xl text-red-600">!</span><h1 class="text-2xl font-bold">Видалити особисті дані?</h1><p class="mt-4 break-words leading-7 text-slate-600">Ви збираєтеся видалити «{{ object.first_name }}». Цю дію неможливо скасувати.</p><form method="post" class="mt-8 flex flex-wrap gap-3">{% csrf_token %}<button type="submit" class="btn btn-danger">Так, видалити</button><a href="{% url 'resume_detail' object.resume.pk %}" class="btn btn-secondary">Скасувати</a></form></section>{% endblock %}

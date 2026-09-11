@@ -1,7 +1,4 @@
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-
-    {{ form.as_p }}
-
-    <button type="submit">Зберегти</button>
-</form>
+{% extends "resumes/form_base.html" %}
+{% block form_title %}Особисті дані{% endblock %}
+{% block heading %}Особисті дані{% endblock %}
+{% block description %}Представтеся та залиште контакти, за якими з вами можна зв’язатися.{% endblock %}

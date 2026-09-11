@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}{% block form_title %}Заповніть дані{% endblock %}{% endblock %}
+{% block content %}
+<div class="mx-auto max-w-2xl">
+    <a href="{% if object.resume_id %}{% url 'resume_detail' object.resume_id %}{% elif object.pk %}{% url 'resume_detail' object.pk %}{% elif view.kwargs.pk %}{% url 'resume_detail' view.kwargs.pk %}{% else %}{% url 'resume_list' %}{% endif %}" class="text-link mb-6">← Назад</a>
+    <section class="panel"><p class="mb-3 text-xs font-semibold uppercase tracking-widest text-blue-700">Редактор резюме</p><h1 class="text-2xl font-bold tracking-tight">{% block heading %}Заповніть дані{% endblock %}</h1><p class="muted mb-8 mt-3">{% block description %}Додайте інформацію, яку хочете показати у своєму резюме.{% endblock %}</p>
+    <form method="post" enctype="multipart/form-data" class="resume-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="mt-8 border-t border-slate-100 pt-6"><button type="submit" class="btn btn-primary w-full sm:w-auto">{% block submit_label %}Зберегти{% endblock %}</button></div>
+    </form></section>
+</div>
+{% endblock %}

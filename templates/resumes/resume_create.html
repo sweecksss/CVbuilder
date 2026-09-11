@@ -1,9 +1,4 @@
-<h1>створити резюме</h1>
-
-<form method="post">
-    {% csrf_token %}
-
-    {{ form.as_p }}
-
-    <button type="submit">створити</button>
-</form>
+{% extends "resumes/form_base.html" %}
+{% block form_title %}Нове резюме{% endblock %}
+{% block heading %}Нове резюме{% endblock %}
+{% block description %}Придумайте зрозумілу назву, наприклад «Python Developer». Інші розділи можна заповнити після створення.{% endblock %}
