@@ -5,7 +5,7 @@ from .models import Resume, PersonalInfo, Education, WorkExperience, Skill
 class ResumeForm(forms.ModelForm):
     class Meta:
         model = Resume
-        fields = ["title"]
+        fields = ["title", "template"]
 
 class PersonalInfoForm(forms.ModelForm):
     class Meta:

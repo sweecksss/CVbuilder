@@ -1,139 +1,63 @@
-{% load static %}
-
 <!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
     <title>{{ resume.title }}</title>
-
-    <link rel="stylesheet" href="{% static 'css/resume_pdf.css' %}">
 </head>
-
 <body>
-
-<div class="resume">
-
-    <header class="header">
-
-        {% if resume.personal_info.photo %}
-            <img
-                class="photo"
-                src="{{ resume.personal_info.photo.url }}"
-                alt="Фото"
-            >
-        {% endif %}
-
-        <div class="header-info">
-            <h1>
-                {{ resume.personal_info.first_name }}
-                {{ resume.personal_info.last_name }}
-            </h1>
-
-            <div class="contacts">
-                {% if resume.personal_info.email %}
-                    <span>{{ resume.personal_info.email }}</span>
-                {% endif %}
-
-                {% if resume.personal_info.phone %}
-                    <span>{{ resume.personal_info.phone }}</span>
-                {% endif %}
-
-                {% if resume.personal_info.city %}
-                    <span>{{ resume.personal_info.city }}</span>
-                {% endif %}
-            </div>
-        </div>
-
-    </header>
-
-
-    {% if resume.personal_info.about %}
+<table class="resume"><tbody><tr>
+    <td class="sidebar">
+        {% if photo_url %}<img class="photo" src="{{ photo_url }}" alt="Фото">{% endif %}
+        {% if resume.personal_info %}
         <section>
-            <h2>Про себе</h2>
-            <p>{{ resume.personal_info.about }}</p>
+            <h2>Контакти</h2>
+            {% if resume.personal_info.email %}<p>{{ resume.personal_info.email }}</p>{% endif %}
+            {% if resume.personal_info.phone %}<p>{{ resume.personal_info.phone }}</p>{% endif %}
+            {% if resume.personal_info.city %}<p>{{ resume.personal_info.city }}</p>{% endif %}
         </section>
-    {% endif %}
-
-
-    {% if resume.skills.all %}
+        {% endif %}
+        {% if resume.skills.all %}
         <section>
             <h2>Навички</h2>
-
-            {% for skill in resume.skills.all %}
-                <div class="skill">
-                    <h3>{{ skill.name }}</h3>
-
-                    {% if skill.level %}
-                        <p>Рівень: {{ skill.level }}</p>
-                    {% endif %}
-                </div>
-            {% endfor %}
+            <ul>{% for skill in resume.skills.all %}<li>{{ skill.name }}{% if skill.level %}<span class="secondary"> — {{ skill.level }}</span>{% endif %}</li>{% endfor %}</ul>
         </section>
-    {% endif %}
-
-
-    <section>
-        <h2>Досвід роботи</h2>
-
-        {% for experience in resume.work_experiences.all %}
-            <div class="experience">
-
-                <h3>{{ experience.company }}</h3>
-
-                {% if experience.position %}
-                    <p>{{ experience.position }}</p>
-                {% endif %}
-
-                {% if experience.start_date %}
-                    <p>Початок: {{ experience.start_date }}</p>
-                {% endif %}
-
-                {% if experience.end_date %}
-                    <p>Кінець: {{ experience.end_date }}</p>
-                {% endif %}
-
-                {% if experience.description %}
-                    <p>{{ experience.description }}</p>
-                {% endif %}
-
-            </div>
-        {% empty %}
-            <p>Досвід роботи ще не доданий.</p>
-        {% endfor %}
-    </section>
-
-
-    {% if resume.education.all %}
+        {% endif %}
+        {% if resume.education.all %}
         <section>
             <h2>Освіта</h2>
-
             {% for education in resume.education.all %}
-                <div class="education">
-
-                    <h3>{{ education.institution }}</h3>
-
-                    {% if education.specialty %}
-                        <p>{{ education.specialty }}</p>
-                    {% endif %}
-
-                    {% if education.start_date %}
-                        <p>Початок: {{ education.start_date }}</p>
-                    {% endif %}
-
-                    {% if education.end_date %}
-                        <p>Кінець: {{ education.end_date }}</p>
-                    {% endif %}
-
-                    {% if education.description %}
-                        <p>{{ education.description }}</p>
-                    {% endif %}
-
-                </div>
+            <div class="entry">
+                <h3>{{ education.institution }}</h3>
+                {% if education.specialty %}<p>{{ education.specialty }}</p>{% endif %}
+                {% if education.start_date or education.end_date %}<p class="dates">{% if education.start_date %}{{ education.start_date|date:"m.Y" }}{% endif %}{% if education.end_date %} — {{ education.end_date|date:"m.Y" }}{% endif %}</p>{% endif %}
+                {% if education.description %}<p class="description">{{ education.description }}</p>{% endif %}
+            </div>
             {% endfor %}
         </section>
-    {% endif %}
-
-</div>
-
+        {% endif %}
+    </td>
+    <td class="main-content">
+        <header>
+            {% if resume.personal_info %}<h1>{{ resume.personal_info.first_name }}<br>{{ resume.personal_info.last_name }}</h1>{% endif %}
+            <p class="resume-title">{{ resume.title }}</p>
+        </header>
+        {% if resume.personal_info.about %}
+        <section><h2>Про себе</h2><p class="description">{{ resume.personal_info.about }}</p></section>
+        {% endif %}
+        {% if resume.work_experiences.all %}
+        <section>
+            <h2>Досвід роботи</h2>
+            {% for experience in resume.work_experiences.all %}
+            <article class="entry">
+                <h3>{{ experience.position|default:experience.company }}</h3>
+                {% if experience.position and experience.company %}<p class="company">{{ experience.company }}</p>{% endif %}
+                {% if experience.start_date or experience.end_date %}<p class="dates">{% if experience.start_date %}{{ experience.start_date|date:"m.Y" }}{% endif %}{% if experience.end_date %} — {{ experience.end_date|date:"m.Y" }}{% endif %}</p>{% endif %}
+                {% if experience.description %}<p class="description">{{ experience.description }}</p>{% endif %}
+            </article>
+            {% endfor %}
+        </section>
+        {% endif %}
+    </td>
+</tr></tbody></table>
 </body>
 </html>

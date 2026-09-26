@@ -1,0 +1,31 @@
+@page {
+    size: A4;
+    margin: 17mm 19mm 19mm;
+    @bottom-right {
+        content: counter(page);
+        color: #89919b;
+        font-family: "DejaVu Sans", sans-serif;
+        font-size: 8pt;
+    }
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; color: #27313d; font-family: "DejaVu Sans", sans-serif; font-size: 10pt; line-height: 1.65; overflow-wrap: anywhere; }
+.header { border-bottom: 1mm solid #304e65; padding-bottom: 6mm; margin-bottom: 7mm; display: flow-root; }
+h1 { margin: 0; color: #182b3b; font-size: 25pt; line-height: 1.25; font-weight: 700; }
+.resume-title { margin: 2mm 0 3mm; color: #52687c; font-size: 13pt; }
+.photo { float: right; width: 27mm; height: 27mm; object-fit: cover; border-radius: 4mm; margin: 0 0 3mm 6mm; }
+.contacts { font-size: 8.5pt; color: #5d6873; }
+.contacts span { display: inline; }
+.contacts span + span::before { content: " / "; color: #a2acb5; margin: 0 1mm; }
+section { margin-bottom: 7mm; }
+h2 { margin: 0 0 3mm; padding-bottom: 1.5mm; border-bottom: 0.3mm solid #d8e0e7; color: #304e65; font-size: 11pt; text-transform: uppercase; letter-spacing: 1px; break-after: avoid; }
+h3 { margin: 0 0 1mm; color: #182b3b; font-size: 10.5pt; line-height: 1.4; break-after: avoid; }
+p { margin: 0 0 2mm; orphans: 3; widows: 3; }
+.entry { margin-bottom: 5mm; }
+.company { font-weight: 700; break-after: avoid; }
+.dates { color: #697583; font-size: 9pt; break-after: avoid; }
+.description { white-space: pre-line; }
+ul { margin: 0; padding-left: 5mm; }
+li { margin-bottom: 1mm; }
+.secondary { color: #697583; }

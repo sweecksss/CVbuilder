@@ -1,0 +1,30 @@
+@page {
+    size: A4;
+    margin: 16mm 18mm 18mm;
+    @bottom-right {
+        content: counter(page);
+        font-family: "DejaVu Sans", sans-serif;
+        font-size: 8pt;
+        color: #487366;
+    }
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "DejaVu Sans", sans-serif; font-size: 10pt; line-height: 1.6; color: #273b34; overflow-wrap: anywhere; }
+.header { display: flow-root; background: #edf5f0; border-left: 1.5mm solid #287357; padding: 7mm; margin-bottom: 8mm; }
+h1 { margin: 0; font-size: 25pt; line-height: 1.25; letter-spacing: -0.5px; color: #174832; }
+.resume-title { margin: 3mm 0; text-transform: uppercase; font-size: 11pt; letter-spacing: 1.5px; color: #287357; }
+.photo { float: right; width: 26mm; height: 26mm; border-radius: 50%; object-fit: cover; margin: 0 0 3mm 5mm; }
+.contacts { font-size: 8.5pt; color: #486457; }
+.contacts span { display: block; }
+section { margin-bottom: 7mm; }
+h2 { margin: 0 0 4mm; font-size: 10pt; letter-spacing: 1.5px; text-transform: uppercase; color: #287357; break-after: avoid; }
+h3 { margin: 0 0 1mm; font-size: 11pt; line-height: 1.4; color: #173f2d; break-after: avoid; }
+p { margin: 0 0 2mm; orphans: 3; widows: 3; }
+.entry { border-left: 0.5mm solid #c7ded1; padding-left: 5mm; margin-bottom: 5mm; }
+.company { font-weight: bold; break-after: avoid; }
+.dates, .secondary { color: #5d7267; font-size: 9pt; }
+.dates { break-after: avoid; }
+.description { white-space: pre-line; }
+ul { list-style: none; margin: 0; padding: 0; }
+li { display: inline-block; max-width: 100%; padding: 1.5mm 3mm; margin: 0 2mm 2mm 0; background: #edf5f0; border: 0.25mm solid #d6e7dd; border-radius: 2mm; font-size: 9pt; }

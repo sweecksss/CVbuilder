@@ -5,8 +5,13 @@ from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.http import HttpResponse
 from django.template.loader import render_to_string
-from weasyprint import HTML
+from weasyprint import HTML, CSS
+from django.conf import settings
+from pathlib import Path
 from django.urls import reverse
+from django.shortcuts import get_object_or_404, redirect
+from django.views import View
+from django.db import transaction
 
 from .models import Resume, PersonalInfo, Education, WorkExperience, Skill
 from .forms import ResumeForm, PersonalInfoForm, EducationForm, WorkExperienceForm, SkillForm
@@ -41,23 +46,49 @@ class ResumePDFView(LoginRequiredMixin, DetailView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
 
+        personal_info = getattr(self.object, "personal_info", None)
+        photo_url = None
+        if personal_info and personal_info.photo:
+            photo_url = Path(personal_info.photo.path).as_uri()
+
+        templates = {
+            "sidebar": "resumes/resume_pdf.html",
+            "classic": "resumes/resume_pdf_classic.html",
+            "modern": "resumes/resume_pdf_classic.html",
+        }
+
+        template_name = templates.get(
+            self.object.template,
+            templates["sidebar"],
+        )
+
+        stylesheets = {
+            "sidebar": "static/css/resume_pdf.css",
+            "classic": "static/css/resume_pdf_classic.css",
+            "modern": "static/css/resume_pdf_modern.css",
+        }
+        stylesheet = stylesheets.get(self.object.template, stylesheets["sidebar"])
+
         html_string = render_to_string(
-            "resumes/resume_pdf.html",
-            {"resume": self.object}
+            template_name,
+            {"resume": self.object, "photo_url": photo_url}
         )
 
         pdf = HTML(
             string=html_string,
             base_url=request.build_absolute_uri("/")
-        ).write_pdf()
+        ).write_pdf(stylesheets=[CSS(filename=str(settings.BASE_DIR / stylesheet))])
 
         response = HttpResponse(
             pdf,
             content_type="application/pdf"
         )
 
+        preview = request.GET.get("preview") == "1"
+        disposition = "inline" if preview else "attachment"
+
         response["Content-Disposition"] = (
-            f'attachment; filename="{self.object.title}.pdf"'
+            f'{disposition}; filename="{self.object.title}.pdf"'
         )
 
         return response
@@ -71,7 +102,7 @@ class ResumeDetailView(LoginRequiredMixin, DetailView):
 
 class ResumeUpdateView(LoginRequiredMixin, UpdateView):
     model = Resume
-    fields = ["title"]
+    fields = ["title", "template"]
     template_name = "resumes/resume_update.html"
 
     def get_queryset(self):
@@ -257,3 +288,64 @@ class WorkExperienceDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse("resume_detail", kwargs={"pk": self.object.resume.pk})
+
+class ResumeCloneView(LoginRequiredMixin, View):
+    @transaction.atomic
+    def post(self, request, pk):
+        original = get_object_or_404(
+            Resume,
+            pk=pk,
+            owner=request.user,
+        )
+
+        suffix = " — копія"
+        max_length = Resume._meta.get_field("title").max_length
+
+        clone = Resume.objects.create(
+            owner=request.user,
+            title=original.title[:max_length - len(suffix)] + suffix,
+            template=original.template,
+        )
+
+        personal_info = getattr(original, "personal_info", None)
+
+        if personal_info:
+            PersonalInfo.objects.create(
+                resume=clone,
+                first_name=personal_info.first_name,
+                last_name=personal_info.last_name,
+                email=personal_info.email,
+                phone=personal_info.phone,
+                city=personal_info.city,
+                about=personal_info.about,
+                photo=personal_info.photo.name,
+            )
+
+        for education in original.education.all():
+            Education.objects.create(
+                resume=clone,
+                institution=education.institution,
+                specialty=education.specialty,
+                start_date=education.start_date,
+                end_date=education.end_date,
+                description=education.description,
+            )
+
+        for experience in original.work_experiences.all():
+            WorkExperience.objects.create(
+                resume=clone,
+                company=experience.company,
+                position=experience.position,
+                start_date=experience.start_date,
+                end_date=experience.end_date,
+                description=experience.description,
+            )
+
+        for skill in original.skills.all():
+            Skill.objects.create(
+                resume=clone,
+                name=skill.name,
+                level=skill.level,
+            )
+
+        return redirect("resume_detail", pk=clone.pk)

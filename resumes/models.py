@@ -11,6 +11,15 @@ class Resume(models.Model):
     )
 
     title = models.CharField(max_length=100)
+    template = models.CharField(
+        max_length=20,
+        choices=[
+            ("sidebar", "З бічною колонкою"),
+            ("classic", "Класичний"),
+            ("modern", "Сучасний"),
+        ],
+        default="sidebar",
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
