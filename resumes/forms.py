@@ -67,3 +67,9 @@ class SkillForm(forms.ModelForm):
             "name",
             "level",
         ]
+
+class ResumeVersionForm(forms.Form):
+    label = forms.CharField(
+        label="Назва версії", max_length=100, required=False,
+        widget=forms.TextInput(attrs={"placeholder": "Наприклад: для вакансії Python Developer"}),
+    )

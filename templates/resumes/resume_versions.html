@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Історія версій{% endblock %}
+{% block content %}
+<div class="mx-auto max-w-3xl">
+    <a href="{% url 'resume_detail' resume.pk %}" class="text-link mb-5">← До резюме</a>
+    <h1 class="text-3xl font-bold tracking-tight">Історія версій</h1>
+    <p class="muted mt-3 break-words">{{ resume.title }} · Зберігайте важливі етапи та повертайтеся до них.</p>
+    {% for message in messages %}<p role="status" class="mt-5 rounded-xl bg-green-50 p-4 text-green-800">{{ message }}</p>{% endfor %}
+    <section class="panel my-7">
+        <h2 class="section-title mb-2">Зберегти поточний стан</h2>
+        <p class="muted mb-5">Версія містить назву, оформлення, особисті дані, фото, освіту, досвід і навички. Знімки створюються вручну; перед відновленням — автоматично.</p>
+        <form method="post" action="{% url 'resume_version_create' resume.pk %}" class="resume-form">
+            {% csrf_token %}{{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Зберегти версію</button>
+        </form>
+    </section>
+    <div class="space-y-4">
+        {% for version in page_obj %}
+        <article class="panel">
+            <div class="flex flex-wrap items-start justify-between gap-4">
+                <div class="min-w-0"><h2 class="section-title break-words">{{ version.label|default:"Збережена версія" }}</h2><p class="muted mt-1">{{ version.created_at|date:"d.m.Y H:i:s" }} · №{{ version.pk }}</p></div>
+                <a href="{% url 'resume_version_restore' resume.pk version.pk %}" class="btn btn-secondary">Відновити</a>
+            </div>
+            <details class="mt-4"><summary class="cursor-pointer py-2 text-sm font-semibold text-blue-700">Що збережено</summary>
+                {% include "resumes/includes/version_snapshot.html" with snapshot=version.snapshot %}
+            </details>
+        </article>
+        {% empty %}<div class="panel text-center"><h2 class="section-title">Збережених версій ще немає</h2><p class="muted mt-2">Збережіть першу версію перед наступними змінами.</p></div>{% endfor %}
+    </div>
+    {% if page_obj.has_other_pages %}<nav aria-label="Сторінки історії" class="mt-6 flex flex-wrap items-center justify-center gap-4">
+        {% if page_obj.has_previous %}<a class="btn btn-secondary" href="?page={{ page_obj.previous_page_number }}">← Попередня</a>{% endif %}
+        <span class="muted">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}<a class="btn btn-secondary" href="?page={{ page_obj.next_page_number }}">Наступна →</a>{% endif %}
+    </nav>{% endif %}
+</div>
+{% endblock %}

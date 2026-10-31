@@ -1,0 +1,7 @@
+<div class="mt-4 space-y-4 break-words text-sm leading-6 text-slate-600">
+    <p><strong>{{ snapshot.title }}</strong><br>Шаблон: {% if snapshot.template == 'sidebar' %}З бічною колонкою{% elif snapshot.template == 'classic' %}Класичний{% else %}Сучасний{% endif %}</p>
+    {% if snapshot.personal_info %}<div><h3 class="font-semibold text-slate-900">Особисті дані</h3><p>{{ snapshot.personal_info.first_name }} {{ snapshot.personal_info.last_name }}</p><p>{{ snapshot.personal_info.email }} · {{ snapshot.personal_info.phone }} · {{ snapshot.personal_info.city }}</p><p class="whitespace-pre-line">{{ snapshot.personal_info.about }}</p>{% if snapshot.personal_info.photo %}<p>Фото збережено</p>{% endif %}</div>{% endif %}
+    {% for row in snapshot.work_experiences %}<div><h3 class="font-semibold text-slate-900">Досвід: {{ row.company }}</h3><p>{{ row.position }} · {{ row.start_date|default:"" }} — {{ row.end_date|default:"" }}</p><p class="whitespace-pre-line">{{ row.description }}</p></div>{% endfor %}
+    {% for row in snapshot.education %}<div><h3 class="font-semibold text-slate-900">Освіта: {{ row.institution }}</h3><p>{{ row.specialty }} · {{ row.start_date|default:"" }} — {{ row.end_date|default:"" }}</p><p class="whitespace-pre-line">{{ row.description }}</p></div>{% endfor %}
+    {% if snapshot.skills %}<div><h3 class="font-semibold text-slate-900">Навички</h3>{% for row in snapshot.skills %}<p>{{ row.name }}{% if row.level %} — {{ row.level }}{% endif %}</p>{% endfor %}</div>{% endif %}
+</div>

@@ -3,7 +3,9 @@ from . import views
 from .views import ResumeCreateView, ResumePDFView, ResumeDetailView, ResumeUpdateView, ResumeDeleteView, PersonalInfoCreateView, EducationCreateView, WorkExperienceCreateView, SkillCreateView, SkillUpdateView, SkillDeleteView
 
 urlpatterns = [
-    path("", views.resume_list, name="resume_list"),
+    path("", views.home, name="home"),
+    path("templates/", views.template_catalog, name="template_catalog"),
+    path("resumes/", views.resume_list, name="resume_list"),
     path("create/", ResumeCreateView.as_view(), name="resume_create"),
     path("resume/<int:pk>/pdf/", ResumePDFView.as_view(), name="resume_pdf"),
     path("resume/<int:pk>/", ResumeDetailView.as_view(), name="resume_detail"),
@@ -22,4 +24,8 @@ urlpatterns = [
     path("work-experience/edit/<int:pk>/", views.WorkExperienceUpdateView.as_view(), name="work_experience_update"),
     path("work-experience/delete/<int:pk>/", views.WorkExperienceDeleteView.as_view(), name="work_experience_delete"),
     path("resume/<int:pk>/clone/",views.ResumeCloneView.as_view(),name="resume_clone",),
+    path("resume/<int:pk>/docx/",views.ResumeDOCXView.as_view(),name="resume_docx",),
+    path("resume/<int:pk>/versions/", views.resume_versions, name="resume_versions"),
+    path("resume/<int:pk>/versions/save/", views.resume_version_create, name="resume_version_create"),
+    path("resume/<int:pk>/versions/<int:version_pk>/restore/", views.resume_version_restore, name="resume_version_restore"),
 ]

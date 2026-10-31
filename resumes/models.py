@@ -85,3 +85,17 @@ class Skill(models.Model):
 
     name = models.CharField(max_length=64, blank=True)
     level = models.CharField(max_length=64, blank=True)
+
+class ResumeVersion(models.Model):
+    resume = models.ForeignKey(
+        Resume, on_delete=models.CASCADE, related_name="versions"
+    )
+    label = models.CharField(max_length=100, blank=True)
+    snapshot = models.JSONField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at", "-pk"]
+
+    def __str__(self):
+        return self.label or f"Версія {self.pk}"

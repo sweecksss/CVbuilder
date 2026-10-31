@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Створіть своє резюме{% endblock %}
+{% block content %}
+<section class="grid items-center gap-10 pb-12 pt-2 lg:grid-cols-[1.2fr_1fr] lg:gap-16 lg:pb-20">
+    <div>
+        <p class="mb-5 text-xs font-semibold uppercase tracking-widest text-blue-700">Від досвіду до нових можливостей</p>
+        <h1 class="max-w-2xl text-4xl font-bold leading-tight tracking-tight sm:text-5xl">Ваш наступний крок<br><span class="text-blue-600">починається з резюме.</span></h1>
+        <p class="mt-6 max-w-lg text-lg leading-8 text-slate-500">Зберіть свій досвід, оберіть оформлення та завантажте готовий документ. Усе потрібне — в одному місці.</p>
+        <div class="mt-8 flex flex-wrap gap-3">
+            <a href="{% if user.is_authenticated %}{% url 'resume_create' %}{% else %}{% url 'register' %}{% endif %}" class="btn btn-primary">Створити резюме →</a>
+            <a href="{% url 'template_catalog' %}" class="btn btn-secondary">Переглянути шаблони</a>
+        </div>
+        <p class="mt-5 text-sm text-slate-500">3 шаблони · Експорт PDF та DOCX · Редагування у будь-який час</p>
+    </div>
+    <div class="rounded-3xl bg-blue-50 px-8 pb-8 pt-10 sm:px-12">
+        <img src="{% static 'images/templates/modern.png' %}" alt="Приклад резюме з зеленими акцентами у шаблоні «Сучасний»" width="595" height="842" class="mx-auto w-full max-w-72 rounded-sm shadow-xl">
+        <p class="mt-6 text-center text-sm font-medium text-blue-900">Ваші досягнення. Зрозуміла подача.</p>
+    </div>
+</section>
+<section class="mb-16 border-y border-slate-200 py-9">
+    <h2 class="mb-7 text-2xl font-bold tracking-tight">Від першого рядка до готового документа</h2>
+    <div class="grid gap-7 md:grid-cols-3">
+        <div><p class="mb-3 text-sm font-bold text-blue-600">01 / Оберіть стиль</p><p class="muted">Класичне оформлення, бічна колонка або сучасні акценти — знайдіть свій варіант.</p></div>
+        <div><p class="mb-3 text-sm font-bold text-blue-600">02 / Розкажіть про себе</p><p class="muted">Додайте контакти, фото, освіту, досвід та навички. Створюйте копії під різні вакансії.</p></div>
+        <div><p class="mb-3 text-sm font-bold text-blue-600">03 / Завантажте резюме</p><p class="muted">Перегляньте PDF перед скачуванням або отримайте документ Word для подальшого редагування.</p></div>
+    </div>
+</section>
+<section>
+    <div class="mb-7 flex flex-wrap items-end justify-between gap-4"><div><h2 class="text-2xl font-bold tracking-tight sm:text-3xl">Оформлення, яке працює на вас</h2><p class="muted mt-2">Одна історія — три способи її розповісти.</p></div><a href="{% url 'template_catalog' %}" class="text-link">Усі шаблони →</a></div>
+    {% include "resumes/includes/template_cards.html" %}
+</section>
+<section class="mt-14 flex flex-col justify-between gap-5 rounded-2xl bg-slate-900 p-7 text-white sm:flex-row sm:items-center sm:p-9"><div><h2 class="text-xl font-semibold">Готові до нових можливостей?</h2><p class="mt-2 text-sm text-slate-300">Почніть з назви резюме. Решту можна додати поступово.</p></div><a href="{% url 'resume_create' %}" class="btn btn-primary shrink-0">Почати зараз →</a></section>
+{% endblock %}

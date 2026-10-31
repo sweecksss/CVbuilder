@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Шаблони резюме{% endblock %}
+{% block content %}
+<header class="mb-10 max-w-2xl">
+    <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-blue-700">Ваш досвід. Ваш стиль.</p>
+    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Оберіть своє оформлення</h1>
+    <p class="mt-4 leading-7 text-slate-500">Три стилі для вашого PDF. Натисніть на зразок, щоб роздивитися деталі, або оберіть шаблон і почніть заповнювати резюме.</p>
+</header>
+{% include "resumes/includes/template_cards.html" %}
+<p class="muted mt-7">Оформлення можна змінити пізніше. Зразки містять вигадані дані. DOCX експортується зі стандартним оформленням Word.</p>
+{% if not user.is_authenticated %}<p class="muted mt-2">Щоб створити резюме, увійдіть або <a href="{% url 'register' %}" class="font-semibold text-blue-700 underline">зареєструйтеся</a>.</p>{% endif %}
+{% endblock %}

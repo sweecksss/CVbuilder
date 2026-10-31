@@ -1,0 +1,15 @@
+{% load static %}
+<div class="grid gap-6 md:grid-cols-3">
+    {% for template in templates %}
+    <article class="flex min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white">
+        <a href="{% static 'images/templates/' %}{{ template.key }}.png" target="_blank" rel="noopener" class="block border-b border-slate-100 bg-slate-100 p-6 transition-colors hover:bg-blue-50" aria-label="Збільшити зразок: {{ template.name }} (нова вкладка)">
+            <img src="{% static 'images/templates/' %}{{ template.key }}.png" alt="Зразок PDF у стилі «{{ template.name }}»" width="595" height="842" loading="lazy" class="mx-auto w-full max-w-60 shadow-md">
+        </a>
+        <div class="flex flex-1 flex-col p-6">
+            <h3 class="text-lg font-semibold">{{ template.name }}</h3>
+            <p class="muted mb-6 mt-2">{{ template.description }}</p>
+            <a href="{% url 'resume_create' %}?template={{ template.key }}" class="btn btn-secondary mt-auto w-full" aria-label="Обрати шаблон «{{ template.name }}»">Обрати шаблон →</a>
+        </div>
+    </article>
+    {% endfor %}
+</div>
